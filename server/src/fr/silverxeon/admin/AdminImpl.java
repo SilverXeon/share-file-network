@@ -3,6 +3,7 @@ package fr.silverxeon.admin;
 /**
  * Created by Pierre on 04/02/2017.
  */
+
 import fr.silverxeon.session.Session;
 
 import javax.activation.DataHandler;
@@ -22,17 +23,17 @@ public class AdminImpl implements AdminInter {
     public String upload(DataHandler file) {
         Random r = new Random(System.currentTimeMillis());
         String sessionId;
-        do{
+        do {
             sessionId = String.format("%04d", r.nextInt());
-        }while(listeSession.containsKey(sessionId));
+        } while (listeSession.containsKey(sessionId));
 
-        listeSession.put(sessionId,new Session(sessionId, file));
+        listeSession.put(sessionId, new Session(sessionId, file));
         return sessionId;
     }
 
     @Override
-    public DataHandler download(String session) throws Exception{
-        if(!listeSession.containsKey(session))
+    public DataHandler download(String session) throws Exception {
+        if (!listeSession.containsKey(session))
             throw new Exception("Session inexistante");
         return listeSession.get(session).getZip();
     }
