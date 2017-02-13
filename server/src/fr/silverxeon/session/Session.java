@@ -6,8 +6,10 @@ import fr.silverxeon.server.Server;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.nio.file.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Pierre on 04/02/2017.
@@ -22,6 +24,9 @@ public class Session {
     private long lastUsedZip;
     private DataHandler file;
     private DataHandler zip;
+    private Map<String, String> zip_properties = new HashMap<>();
+    private URI zip_disk;
+    private FileSystem fs;
 
     public Session(String id, DataHandler file) {
         this.id = id;
@@ -33,6 +38,7 @@ public class Session {
         lastUsedZip = System.currentTimeMillis();
         this.file = file;
         this.zip = null;
+        saveFile();
     }
 
     public Session(String id){
@@ -45,6 +51,8 @@ public class Session {
         lastUsedFile = 0;
         this.file = null;
         this.zip = null;
+        loadFile();
+        saveFile();
     }
 
     private void saveFile(){
@@ -56,7 +64,11 @@ public class Session {
             System.err.println(io.getMessage());
         }
 
-        //TODO Creer le zip
+        zip_properties.put("create", "true");
+        zip_properties.put("encoding", "UTF-8");
+        this.zip_disk =  URI.create("jar:file:"+pathToZip+"/archive.zip");
+        loadZip();
+        zip_properties.replace("create", "false");
     }
 
     private void loadFile(){
@@ -69,11 +81,20 @@ public class Session {
     }
 
     private void loadZip(){
-        FileDataSource f = new FileDataSource(Server.PATH+pathToZip);
-        zip = new DataHandler(f);
+        try {
+            fs = FileSystems.newFileSystem(zip_disk, zip_properties);
+        }catch(IOException e){
+            System.err.println(e.getMessage());
+        }
     }
 
     private void unloadZip(){
+        try{
+            fs.close();
+        }catch(IOException e){
+            System.err.println(e.getMessage());
+        }
+        fs = null;
         zip = null;
     }
 
@@ -81,8 +102,7 @@ public class Session {
         if(!activeZip)
             loadZip();
         lastUsedZip = System.currentTimeMillis();
-
-        return zip;
+        return new DataHandler(new FileDataSource(Server.PATH+pathToZip));
     }
 
     public DataHandler getFile(){
@@ -96,8 +116,17 @@ public class Session {
     public void addFileToZip(DataHandler file, String name, String surname){
         if(!activeZip)
             loadZip();
-
-        //TODO ajout de file au zip
+        lastUsedZip = System.currentTimeMillis();
+        String extension[] = file.getName().split(".");
+        String ext = extension[extension.length];
+        Path ZipFilePath = fs.getPath(name+"_"+surname+"."+ext);
+        Path addNewFile = Paths.get(pathToFile);
+        try{
+            Files.copy(addNewFile,ZipFilePath);
+        }
+        catch(IOException e){
+            System.err.println(e.getMessage());
+        }
     }
 
     public void updateLoad(long act){

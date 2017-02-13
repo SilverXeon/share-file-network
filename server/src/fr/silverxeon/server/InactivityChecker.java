@@ -11,6 +11,7 @@ public class InactivityChecker extends Thread{
     private boolean work;
     public void run(){
         while(Server.ACTIVE){
+            System.out.println("Check map");
             work = true;
             for (Map.Entry<String, Session> entry : Server.listeSession.entrySet())
             {
