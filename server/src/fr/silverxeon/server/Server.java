@@ -101,6 +101,7 @@ public class Server {
         ACTIVE = false;
         System.out.println("Extinction, suppression des fichiers ...");
         inactiveCheck.arreter();
+        System.out.println("Thread arrete");
         for (Map.Entry<String, Session> entry : Server.listeSession.entrySet())
         {
             entry.getValue().closeSession();

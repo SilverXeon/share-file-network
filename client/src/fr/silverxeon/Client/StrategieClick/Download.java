@@ -2,6 +2,9 @@ package fr.silverxeon.Client.StrategieClick;
 
 import fr.silverxeon.Graphics.Panneau;
 import fr.silverxeon.client.ClientInter;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.Alert;
 
 import javax.activation.DataHandler;
 import javax.swing.*;
@@ -17,11 +20,26 @@ import java.nio.file.Paths;
  * Created by Pierre on 13/02/2017.
  */
 public class Download implements StrategieClick {
+    public static JFXPanel pan = null;
     @Override
     public void reagir() {
     }
 
     public static void download(String session, Panneau p){
+        if(session.length() == 0){
+            if(pan == null) {                 pan = new JFXPanel();             }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Veuillez verifier le numéro de session.");
+                    alert.setContentText("Veuillez contacter une personne compétente en cas de récidive.");
+                    alert.showAndWait();
+                }
+            });
+            return;
+        }
         ClientInter inst = null;
         try{
             URL url = new URL("http://localhost:9999/share/client?wsdl");
@@ -38,8 +56,17 @@ public class Download implements StrategieClick {
         try{
             d = inst.download(session);
         }catch(Exception e){
-            e.getMessage();
-            //TODO Alert avec session inexistante
+            if(pan == null) {                 pan = new JFXPanel();             }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Session inexistante : "+session);
+                    alert.setContentText("Veuillez contacter une personne compétente en cas de récidive");
+                    alert.showAndWait();
+                }
+            });
             return;
         }
 
@@ -52,8 +79,20 @@ public class Download implements StrategieClick {
             //OutputStream o = new FileOutputStream(new File(fc.getSelectedFile().getAbsolutePath()));
             Files.copy(i, Paths.get(fc.getSelectedFile().getAbsolutePath()));
         }catch(IOException e){
-            e.getMessage();
-            //Alert avec exception
+            if(pan == null) {
+                pan = new JFXPanel();
+            }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Erreur de fichier");
+                    alert.setContentText("Veuillez contacter une personne compétente en cas de récidive");
+                    alert.showAndWait();
+                }
+            });
+            return;
         }
     }
 }

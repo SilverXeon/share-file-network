@@ -62,6 +62,7 @@ public class Session {
     }
 
     private void saveFile(){
+        new File(Server.PATH+id).mkdirs();
         try {
             InputStream is = file.getInputStream();
             Files.copy(is, Paths.get(Server.PATH+pathToFile));

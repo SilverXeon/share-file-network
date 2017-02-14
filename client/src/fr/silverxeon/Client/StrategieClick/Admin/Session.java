@@ -1,6 +1,9 @@
 package fr.silverxeon.Client.StrategieClick.Admin;
 
 import fr.silverxeon.admin.AdminInter;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.Alert;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -12,7 +15,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.io.File;
 
 /**
  * Created by Pierre on 14/02/2017.
@@ -50,7 +52,7 @@ public class Session {
         }
 
         JFileChooser jf = new JFileChooser();
-        jf.setSelectedFile(new File("archive.zip"));
+        jf.setSelectedFile(new java.io.File("archive.zip"));
         int returnVal = jf.showSaveDialog(null);
 
         try{
@@ -60,7 +62,18 @@ public class Session {
             //OutputStream o = new FileOutputStream(new File(fc.getSelectedFile().getAbsolutePath()));
             Files.copy(i, Paths.get(jf.getSelectedFile().getAbsolutePath()));
         }catch(Exception e){
-            //TODO Alert exception
+            new JFXPanel();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Erreur de fichier");
+                    alert.setContentText("Veuillez contacter une personne compétente en cas de récidive");
+                    alert.showAndWait();
+                }
+            });
+            return;
         }
     }
 }

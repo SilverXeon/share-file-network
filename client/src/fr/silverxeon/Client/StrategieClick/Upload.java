@@ -1,6 +1,9 @@
 package fr.silverxeon.Client.StrategieClick;
 
 import fr.silverxeon.client.ClientInter;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.Alert;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -22,6 +25,21 @@ public class Upload implements StrategieClick {
     }
 
     public static void upload(String session, String name, String surname){
+        if(session.length() == 0 || name.length() == 0 || surname.length() == 0){
+            new JFXPanel();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Veuillez verifier le numéro de session, le nom et le prénom.");
+                    alert.setContentText("Veuillez contacter une personne compétente en cas de récidive.");
+                    alert.showAndWait();
+                }
+            });
+            return;
+        }
+
         ClientInter inst = null;
         try{
             URL url = new URL("http://localhost:9999/share/client?wsdl");
@@ -45,8 +63,18 @@ public class Upload implements StrategieClick {
 
             inst.upload(session,d, name, surname, jf.getSelectedFile().getName().substring(jf.getSelectedFile().getName().lastIndexOf('.')+1));
         }catch(Exception e){
-            System.err.println(e.getMessage());
-            //TODO Alert avec exception
+            new JFXPanel();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Erreur lors du transfert");
+                    alert.setContentText("Veuillez contacter une personne compétente en cas de récidive");
+                    alert.showAndWait();
+                }
+            });
+            return;
         }
     }
 }
