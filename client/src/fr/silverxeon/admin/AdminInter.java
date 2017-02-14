@@ -1,4 +1,4 @@
-package fr.silverxeon.client;
+package fr.silverxeon.admin;
 
 /**
  * Created by Pierre on 04/02/2017.
@@ -12,7 +12,7 @@ import javax.jws.soap.SOAPBinding.Style;
 
 @WebService
 @SOAPBinding(style = Style.RPC)
-public interface ClientInter {
+public interface AdminInter {
+    @WebMethod String upload(DataHandler file);
     @WebMethod DataHandler download(String session) throws Exception;
-    @WebMethod void upload(String session,DataHandler file, String name, String surname, String ext) throws Exception;
 }

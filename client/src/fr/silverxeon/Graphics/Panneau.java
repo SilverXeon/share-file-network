@@ -1,9 +1,7 @@
 package fr.silverxeon.Graphics;
 
-import fr.silverxeon.Graphics.StrategieClick.Download;
-import fr.silverxeon.Graphics.StrategieClick.Upload;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.control.Alert;
+import fr.silverxeon.Client.StrategieClick.Download;
+import fr.silverxeon.Client.StrategieClick.Upload;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +14,12 @@ import java.awt.event.ActionListener;
 public class Panneau extends JPanel implements ActionListener{
     private Bouton dlFile;
     private Bouton upFile;
-    private int session;
-    private TextField textField;
+    private String session = "Session : ";
+    private String name = "Nom : ";
+    private String surname = "Prenom : ";
+    private TextField textSession;
+    private TextField textName;
+    private TextField textSurname;
 
 
     private boolean error = false;
@@ -26,39 +28,47 @@ public class Panneau extends JPanel implements ActionListener{
 
     public Panneau() {
         this.setLayout(null);
-        dlFile = new Bouton("Télécharger le fichier", 45, 100, new Download());
+        dlFile = new Bouton("Télécharger le fichier", 45, 115, new Download());
 
         upFile = new Bouton("Rendre un fichier", 45, 170, new Upload());
 
-        textField = new TextField();
+        textSession = new TextField();
+        textName = new TextField();
+        textSurname = new TextField();
 
-        textField.setLocation(45, 50);
-        textField.setSize(200, 50);
+        textSession.setLocation(82, 20);
+        textSession.setSize(150, 20);
+        textName.setSize(150, 20);
+        textSurname.setSize(150, 20);
+        textName.setLocation(82, 50);
+        textSurname.setLocation(82, 80);
         dlFile.addActionListener(this);
         upFile.addActionListener(this);
+
         this.add(dlFile);
         this.add(upFile);
-        this.add(textField);
+        this.add(textSession);
+        this.add(textName);
+        this.add(textSurname);
     }
 
     public void paintComponent(Graphics g){
         g.setColor(Color.white);
         g.fillRect(0,0,this.getWidth(), this.getHeight());
         g.setColor(Color.black);
-        Font font = new Font("Courier", Font.BOLD, 18);
-        g.setFont(font);
-        g.drawString("Entrer un numéro de session : ", 14, 30);
-
+        g.drawString("Session : ", 26, 33);
+        g.drawString("Nom : ", 45, 63);
+        g.drawString("Prenom : ", 27, 93);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        session = Integer.parseInt(textField.getText());
+        session = textSession.getText();
         if(e.getSource() == dlFile)
             Download.download(session, this);
         else
-            Upload.upload(session, this);
+            Upload.upload(session,  textName.getText(), textSurname.getText());
     }
 
     public void displayError(String title, String text){

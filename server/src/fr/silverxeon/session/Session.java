@@ -33,7 +33,7 @@ public class Session {
         pathToFile = id+"/file";
         pathToZip = id+"/archive.zip";
         activeFile = true;
-        activeZip = false;
+        activeZip = true;
         lastUsedFile = System.currentTimeMillis();
         lastUsedZip = System.currentTimeMillis();
         this.file = file;
@@ -58,15 +58,20 @@ public class Session {
     private void saveFile(){
         try {
             InputStream is = file.getInputStream();
-
+            System.out.println(Server.PATH+id);
+            System.out.println(new File(Server.PATH+id).mkdir());
             Files.copy(is, Paths.get(Server.PATH+pathToFile));
+
         }catch(IOException io){
-            System.err.println(io.getMessage());
+            io.printStackTrace();
         }
 
         zip_properties.put("create", "true");
         zip_properties.put("encoding", "UTF-8");
-        this.zip_disk =  URI.create("jar:file:"+pathToZip+"/archive.zip");
+        this.zip_disk = URI.create("jar:file:/"+Server.PATH+pathToZip);
+
+        System.out.println(new File(Server.PATH+pathToZip).toURI());
+        System.out.println(zip_disk);
         loadZip();
         zip_properties.replace("create", "false");
     }
@@ -84,7 +89,7 @@ public class Session {
         try {
             fs = FileSystems.newFileSystem(zip_disk, zip_properties);
         }catch(IOException e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -92,15 +97,17 @@ public class Session {
         try{
             fs.close();
         }catch(IOException e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
         fs = null;
         zip = null;
     }
 
     public DataHandler getZip(){
-        if(!activeZip)
-            loadZip();
+        if(activeZip) {
+            unloadZip();
+            activeZip = false;
+        }
         lastUsedZip = System.currentTimeMillis();
         return new DataHandler(new FileDataSource(Server.PATH+pathToZip));
     }
@@ -113,19 +120,31 @@ public class Session {
         return file;
     }
 
-    public void addFileToZip(DataHandler file, String name, String surname){
+    public void addFileToZip(DataHandler file, String name, String surname, String ext){
+        System.out.println("On ajoute");
+
         if(!activeZip)
             loadZip();
         lastUsedZip = System.currentTimeMillis();
-        String extension[] = file.getName().split(".");
-        String ext = extension[extension.length];
+        File f = null;
+        String fileName = "G:\\TMP\\share"+System.currentTimeMillis();
+        try {
+            InputStream is = file.getInputStream();
+            Files.copy(is, Paths.get(fileName));
+
+            Thread.sleep(10000);
+        }catch(InterruptedException|IOException io){
+            io.printStackTrace();
+        }
+
+        System.out.println("Fichier crée");
         Path ZipFilePath = fs.getPath(name+"_"+surname+"."+ext);
-        Path addNewFile = Paths.get(pathToFile);
+        Path addNewFile = Paths.get(fileName);
         try{
             Files.copy(addNewFile,ZipFilePath);
         }
         catch(IOException e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

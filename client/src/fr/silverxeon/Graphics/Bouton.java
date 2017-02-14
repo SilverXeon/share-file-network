@@ -1,9 +1,8 @@
 package fr.silverxeon.Graphics;
 
-import fr.silverxeon.Graphics.StrategieClick.StrategieClick;
+import fr.silverxeon.Client.StrategieClick.StrategieClick;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 

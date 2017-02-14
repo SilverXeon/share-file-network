@@ -14,5 +14,5 @@ import javax.jws.soap.SOAPBinding.Style;
 @SOAPBinding(style = Style.RPC)
 public interface ClientInter {
     @WebMethod DataHandler download(String session) throws Exception;
-    @WebMethod void upload(String session,DataHandler file, String name, String surname, String ext) throws Exception;
+    @WebMethod void upload(String session, DataHandler file, String name, String surname, String ext) throws Exception;
 }

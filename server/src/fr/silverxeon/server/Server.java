@@ -66,6 +66,9 @@ public class Server {
     public static void main(String[] args) {
         config();
         crash();
+        AdminImpl.setListeSession(listeSession);
+        ClientImpl.setListeSession(listeSession);
+        System.out.println(Server.PATH);
         Endpoint.publish("http://localhost:9999/share/admin", new AdminImpl());
         Endpoint.publish("http://localhost:9999/share/client", new ClientImpl());
         System.out.println("Ready !");
