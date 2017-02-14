@@ -21,7 +21,6 @@ public class Bouton extends JButton implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Je clique");
         strat.reagir();
     }
 

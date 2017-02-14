@@ -37,7 +37,6 @@ public class PanneauAdmin extends Panneau implements ActionListener{
             this.add(recup);
         }
         else if(e.getSource() == recup){
-            System.out.println("Recup");
             Session.recupZip(maSession);
         }
         else

@@ -19,7 +19,6 @@ import javax.xml.ws.soap.MTOMFeature;
 public class Upload implements StrategieClick {
     @Override
     public void reagir() {
-        System.out.println("J'upload");
     }
 
     public static void upload(String session, String name, String surname){

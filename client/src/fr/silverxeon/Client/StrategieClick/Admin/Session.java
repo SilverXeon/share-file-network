@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.File;
 
 /**
  * Created by Pierre on 14/02/2017.
@@ -22,7 +23,6 @@ public class Session {
         try{
             URL url = new URL("http://localhost:9999/share/admin?wsdl");
             QName qname = new QName("http://admin.silverxeon.fr/", "AdminImplService");
-            System.out.println(qname);
             Service service = Service.create(url, qname);
             inst = service.getPort(AdminInter.class);
         }catch(MalformedURLException e){
@@ -33,7 +33,7 @@ public class Session {
         int returnVal = jf.showOpenDialog(null);
         FileDataSource f = new FileDataSource(jf.getSelectedFile());
         DataHandler d = new DataHandler(f);
-        return inst.upload(d);
+        return inst.upload(d, jf.getSelectedFile().getName().substring(jf.getSelectedFile().getName().lastIndexOf('.')+1));
     }
 
     public static void recupZip(String session){
@@ -50,6 +50,7 @@ public class Session {
         }
 
         JFileChooser jf = new JFileChooser();
+        jf.setSelectedFile(new File("archive.zip"));
         int returnVal = jf.showSaveDialog(null);
 
         try{

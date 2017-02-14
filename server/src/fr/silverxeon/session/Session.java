@@ -27,8 +27,9 @@ public class Session {
     private Map<String, String> zip_properties = new HashMap<>();
     private URI zip_disk;
     private FileSystem fs;
+    private String extension;
 
-    public Session(String id, DataHandler file) {
+    public Session(String id, DataHandler file, String ext) {
         this.id = id;
         pathToFile = id+"/file";
         pathToZip = id+"/archive.zip";
@@ -38,6 +39,7 @@ public class Session {
         lastUsedZip = System.currentTimeMillis();
         this.file = file;
         this.zip = null;
+        extension = ext;
         saveFile();
     }
 
@@ -55,11 +57,13 @@ public class Session {
         saveFile();
     }
 
+    public String getExtension() {
+        return extension;
+    }
+
     private void saveFile(){
         try {
             InputStream is = file.getInputStream();
-            System.out.println(Server.PATH+id);
-            System.out.println(new File(Server.PATH+id).mkdir());
             Files.copy(is, Paths.get(Server.PATH+pathToFile));
 
         }catch(IOException io){
@@ -70,8 +74,6 @@ public class Session {
         zip_properties.put("encoding", "UTF-8");
         this.zip_disk = URI.create("jar:file:/"+Server.PATH+pathToZip);
 
-        System.out.println(new File(Server.PATH+pathToZip).toURI());
-        System.out.println(zip_disk);
         loadZip();
         zip_properties.replace("create", "false");
     }
@@ -121,7 +123,6 @@ public class Session {
     }
 
     public void addFileToZip(DataHandler file, String name, String surname, String ext){
-        System.out.println("On ajoute");
 
         if(!activeZip)
             loadZip();
@@ -137,7 +138,6 @@ public class Session {
             io.printStackTrace();
         }
 
-        System.out.println("Fichier crée");
         Path ZipFilePath = fs.getPath(name+"_"+surname+"."+ext);
         Path addNewFile = Paths.get(fileName);
         try{

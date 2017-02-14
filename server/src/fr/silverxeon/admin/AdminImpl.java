@@ -20,7 +20,7 @@ public class AdminImpl implements AdminInter {
     }
 
     @Override
-    public String upload(DataHandler file) {
+    public String upload(DataHandler file, String ext) {
         Random r = new Random(System.currentTimeMillis());
         String sessionId;
         do {
@@ -28,7 +28,7 @@ public class AdminImpl implements AdminInter {
             sessionId = String.format("%04d", Math.abs(r.nextInt()%10000));
         } while (listeSession.containsKey(sessionId));
 
-        listeSession.put(sessionId, new Session(sessionId, file));
+        listeSession.put(sessionId, new Session(sessionId, file, ext));
         return sessionId;
     }
 

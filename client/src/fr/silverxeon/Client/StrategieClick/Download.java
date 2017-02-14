@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 public class Download implements StrategieClick {
     @Override
     public void reagir() {
-        System.out.println("Je dl");
     }
 
     public static void download(String session, Panneau p){
@@ -46,6 +45,7 @@ public class Download implements StrategieClick {
 
         try{
             JFileChooser fc = new JFileChooser();
+            fc.setSelectedFile(new File("fichier."+inst.getExtension(session)));
             int returnVal = fc.showSaveDialog(null);
             InputStream i = d.getInputStream();
 

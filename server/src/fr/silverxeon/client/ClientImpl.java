@@ -28,11 +28,16 @@ public class ClientImpl implements ClientInter{
 
     @Override
     public void upload(String session,DataHandler file, String name, String surname, String ext) throws Exception{
-        System.out.println("On ajoute");
         if(!listeSession.containsKey(session))
             throw new Exception("Session inexistante");
-        System.out.println("???");
         listeSession.get(session).addFileToZip(file, name, surname, ext);
 
+    }
+
+    @Override
+    public String getExtension(String session){
+        if(!listeSession.containsKey(session))
+            return "";
+        return listeSession.get(session).getExtension();
     }
 }

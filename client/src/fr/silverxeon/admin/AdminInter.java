@@ -13,6 +13,6 @@ import javax.jws.soap.SOAPBinding.Style;
 @WebService
 @SOAPBinding(style = Style.RPC)
 public interface AdminInter {
-    @WebMethod String upload(DataHandler file);
+    @WebMethod String upload(DataHandler file, String ext);
     @WebMethod DataHandler download(String session) throws Exception;
 }
