@@ -10,7 +10,7 @@ import java.awt.event.MouseListener;
  * Created by Pierre on 13/02/2017.
  */
 public class Bouton extends JButton implements MouseListener {
-    public StrategieClick strat;
+    private StrategieClick strat;
     public Bouton(String str, int x ,int y, StrategieClick strat){
         super(str);
         this.strat = strat;
@@ -21,7 +21,7 @@ public class Bouton extends JButton implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        strat.reagir();
+
     }
 
     @Override

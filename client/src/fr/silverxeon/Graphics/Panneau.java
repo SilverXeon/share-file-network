@@ -77,7 +77,4 @@ public class Panneau extends JPanel implements ActionListener{
         errorMessage = text;
     }
 
-    public void checkError(){
-
-    }
 }

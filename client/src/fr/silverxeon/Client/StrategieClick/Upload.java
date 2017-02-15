@@ -16,13 +16,13 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPBinding;
 import javax.xml.ws.soap.MTOMFeature;
 
+import static fr.silverxeon.Client.Main.IP;
+import static fr.silverxeon.Client.Main.PORT;
+
 /**
  * Created by Pierre on 13/02/2017.
  */
 public class Upload implements StrategieClick {
-    @Override
-    public void reagir() {
-    }
 
     public static void upload(String session, String name, String surname){
         if(session.length() == 0 || name.length() == 0 || surname.length() == 0){
@@ -42,7 +42,7 @@ public class Upload implements StrategieClick {
 
         ClientInter inst = null;
         try{
-            URL url = new URL("http://localhost:9999/share/client?wsdl");
+            URL url = new URL("http://"+IP+":"+PORT+"/share/client?wsdl");
             QName qname = new QName("http://client.silverxeon.fr/", "ClientImplService");
 
             Service service = Service.create(url, qname);

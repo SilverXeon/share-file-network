@@ -16,6 +16,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static fr.silverxeon.Client.Main.IP;
+import static fr.silverxeon.Client.Main.PORT;
+
 /**
  * Created by Pierre on 14/02/2017.
  */
@@ -23,7 +26,7 @@ public class Session {
     public static String creerSession(){
         AdminInter inst = null;
         try{
-            URL url = new URL("http://localhost:9999/share/admin?wsdl");
+            URL url = new URL("http://"+IP+":"+PORT+"/share/admin?wsdl");
             QName qname = new QName("http://admin.silverxeon.fr/", "AdminImplService");
             Service service = Service.create(url, qname);
             inst = service.getPort(AdminInter.class);
@@ -41,7 +44,7 @@ public class Session {
     public static void recupZip(String session){
         AdminInter inst = null;
         try{
-            URL url = new URL("http://localhost:9999/share/admin?wsdl");
+            URL url = new URL("http://"+IP+":"+PORT+"/share/admin?wsdl");
             QName qname = new QName("http://admin.silverxeon.fr/", "AdminImplService");
 
             Service service = Service.create(url, qname);

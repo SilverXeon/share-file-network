@@ -129,7 +129,7 @@ public class Session {
             loadZip();
         lastUsedZip = System.currentTimeMillis();
         File f = null;
-        String fileName = "G:\\TMP\\share"+System.currentTimeMillis();
+        String fileName = Server.TMP+System.currentTimeMillis();
         try {
             InputStream is = file.getInputStream();
             Files.copy(is, Paths.get(fileName));

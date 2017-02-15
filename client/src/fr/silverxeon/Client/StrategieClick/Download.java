@@ -16,14 +16,14 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static fr.silverxeon.Client.Main.IP;
+import static fr.silverxeon.Client.Main.PORT;
+
 /**
  * Created by Pierre on 13/02/2017.
  */
 public class Download implements StrategieClick {
     public static JFXPanel pan = null;
-    @Override
-    public void reagir() {
-    }
 
     public static void download(String session, Panneau p){
         if(session.length() == 0){
@@ -42,7 +42,7 @@ public class Download implements StrategieClick {
         }
         ClientInter inst = null;
         try{
-            URL url = new URL("http://localhost:9999/share/client?wsdl");
+            URL url = new URL("http://"+IP+":"+PORT+"/share/client?wsdl");
             QName qname = new QName("http://client.silverxeon.fr/", "ClientImplService");
 
 

@@ -19,6 +19,10 @@ public class Server {
     public static String PATH = "/tmp/";
     public static int INACTIVE_DELAY = 300000;
     private static InactivityChecker inactiveCheck;
+    public static String IP;
+    public static String PORT;
+    public static String TMP;
+
     public static boolean ACTIVE = true;
 
     public static void crash(){
@@ -68,8 +72,8 @@ public class Server {
         crash();
         AdminImpl.setListeSession(listeSession);
         ClientImpl.setListeSession(listeSession);
-        Endpoint.publish("http://localhost:9999/share/admin", new AdminImpl());
-        Endpoint.publish("http://localhost:9999/share/client", new ClientImpl());
+        Endpoint.publish("http://"+IP+":"+PORT+"/share/admin", new AdminImpl());
+        Endpoint.publish("http://"+IP+":"+PORT+"/share/client", new ClientImpl());
         System.out.println("Ready !");
         inactiveCheck = new InactivityChecker();
         inactiveCheck.start();
